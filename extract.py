@@ -7,6 +7,23 @@ import rake
 import operator
 import io
 
+import datetime
+
+inputDate = input("Enter the date in format 'dd/mm/yy' : ")
+
+day,month,year = inputDate.split('/')
+
+isValidDate = True
+try :
+    datetime.datetime(int(year),int(month),int(day))
+except ValueError :
+    isValidDate = False
+
+if(isValidDate) :
+    print ("Input date is valid ..")
+else :
+    print ("Input date is not valid..")
+
 # EXAMPLE ONE - SIMPLE
 stoppath = "data/stoplists/SmartStoplist.txt"
 
@@ -14,7 +31,7 @@ stoppath = "data/stoplists/SmartStoplist.txt"
 rake_object = rake.Rake(stoppath, 5, 3, 4)
 
 # 2. run on RAKE on a given text
-sample_file = io.open("data/docs/fao_test/w2167e.txt", 'r',encoding="iso-8859-1")
+sample_file = io.open("data/nadhini.txt", 'r',encoding="iso-8859-1")
 text = sample_file.read()
 
 keywords = rake_object.run(text)
@@ -28,12 +45,6 @@ print("----------")
 # 1. initialize RAKE by providing a path to a stopwords file
 rake_object = rake.Rake(stoppath)
 
-text = "Compatibility of systems of linear constraints over the set of natural numbers. Criteria of compatibility " \
-       "of a system of linear Diophantine equations, strict inequations, and nonstrict inequations are considered. " \
-       "Upper bounds for components of a minimal set of solutions and algorithms of construction of minimal generating"\
-       " sets of solutions for all types of systems are given. These criteria and the corresponding algorithms " \
-       "for constructing a minimal supporting set of solutions can be used in solving all the considered types of " \
-       "systems and systems of mixed types."
 
 
 
