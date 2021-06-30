@@ -18,7 +18,7 @@ sentencesWithDatesArray = {}
 
 
 def findDates(keyword):
-    dates_with_sentences=''
+    dates_with_sentences = ''
     matches = datefinder.find_dates(keyword)
     for match in matches:
         sentencesWithDatesArray[sentence] = str(match)
@@ -41,7 +41,7 @@ def convertToJSON(fileName, data):
 stoppath = "data/stoplists/SmartStoplist.txt"
 
 # 1. initialize RAKE by providing a path to a stopwords file
-rake_object = rake.Rake(stoppath, 5, 3, 2)
+rake_object = rake.Rake(stoppath, 5, 3, 5)
 
 # 2. run on RAKE on a given text
 sample_file = io.open("data/chat.txt", 'r', encoding="iso-8859-1")
@@ -69,17 +69,29 @@ keywordcandidates = rake.generate_candidate_keyword_scores(phraseList, wordscore
 sortedKeywords = sorted(six.iteritems(keywordcandidates), key=operator.itemgetter(1), reverse=True)
 totalKeywords = len(sortedKeywords)
 
-popularSentences = ''
-popularKeywords = ''
+popularSentences = {}
+popularKeywords = {}
 
 for sentence in sentenceList:
     if sentence:
         findDates(sentence)
-
+i = 0
+j = 0
 for keyword in keywords:
-    popularKeywords += keyword[0] + '\n'
+    i += 1
+    popularKeywords[i] = keyword[0]
+    nextSentence = 0
     for sentence in sentenceList:
+        if nextSentence == 1:
+            j += 1
+            if len(sentence.split(' ')) >= 3:
+                popularSentences[j] = sentence
+            nextSentence = 0
         if keyword[0] in sentence:
-            popularSentences += sentence + '\n'
-dumpToFile('output_data/popular_sentences.txt', popularSentences)
-dumpToFile('output_data/popular_keywords.txt', popularKeywords)
+            j += 1
+            nextSentence = 1
+            if len(sentence.split(' ')) >= 3:
+                popularSentences[j] = sentence
+
+convertToJSON('output_data/popular_sentences.txt', popularSentences)
+convertToJSON('output_data/popular_keywords.txt', popularKeywords)
