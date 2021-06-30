@@ -1,0 +1,7 @@
+meeting
+agenda
+update
+completed
+working
+updates
+training
